@@ -96,6 +96,11 @@
             margin: 0;
             cursor: ew-resize;
         }
+        a:visited {
+            color: green;
+            background-color: transparent;
+            text-decoration: underline;
+        }
     </style>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.1/mapbox-gl.js"></script>
 </head>
@@ -105,8 +110,16 @@
     <div id='map'></div>
 
     <div class="map-overlay top">
+        <h2 style="color:blue; text-shadow:1px 0 0 white,0 1px 0 white,-1px 0 0 white,0 -1px 0 white;"">
+            Washington Nursing Homes 2020
+        </h2>
+        <p style="text-align: right; font-size:10pt; color:blue">
+            Source: <a href="https://geo.wa.gov/datasets/WADSHS::long-term-care-nursing-homes/explore?location=47.262875%2C-120.675378%2C7.96">
+                Washington Geospatial Open Data Portal, WA State Department of Social and Health Services
+            </a>
+        </p>
         <div class="map-overlay-inner">
-        <label>Map opacity: <span id="slider-value">100%</span></label>
+        <label>Layer opacity: <span id="slider-value">100%</span></label>
         <input id="slider" type="range" min="0" max="100" step="0" value="100">
         </div>
     </div>
@@ -172,7 +185,7 @@
             });
 
             map.addLayer({
-                'id': 'nh',
+                'id': 'nursing homes',
                 'type': 'raster',
                 'layout': {
                     'visibility': 'none'
@@ -199,6 +212,7 @@
             });
 
             map.addControl(new mapboxgl.NavigationControl(), "top-left");
+            map.addControl(new mapboxgl.ScaleControl({position: 'bottom-right'}));
 
         });
 
@@ -206,12 +220,12 @@
         // After the last frame rendered before the map enters an "idle" state.
         map.on('idle', () => {
             // If these two layers were not added to the map, abort
-            if (!map.getLayer('bubble') || !map.getLayer('nh')) {
+            if (!map.getLayer('bubble') || !map.getLayer('nursing homes')) {
                 return;
             }
 
             // Enumerate ids of the layers.
-            const toggleableLayerIds = ['bubble', 'nh', 'combined', 'rosemary'];
+            const toggleableLayerIds = ['bubble', 'nursing homes', 'combined', 'rosemary'];
 
             // Set up the corresponding toggle button for each layer.
             for (const id of toggleableLayerIds) {
